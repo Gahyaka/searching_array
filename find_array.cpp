@@ -4,10 +4,6 @@
 #include <sstream>
 #include <vector>
 
-
-// bool searchArray(int arr[], int size, int target) { ... }
-// bool searchCharArray(char arr[], int size, char target) { ... }
-
 int searchArrayIndex(int arr[], int size, int target) {
     for (int i = 0; i < size; i++) {
         if (arr[i] == target) {
