@@ -1,5 +1,9 @@
 #include <iostream>
 #include <limits>
+#include <string>
+#include <sstream>
+#include <vector>
+
 
 // bool searchArray(int arr[], int size, int target) { ... }
 // bool searchCharArray(char arr[], int size, char target) { ... }
@@ -22,19 +26,24 @@ int searchCharArrayIndex(char arr[], int size, char target) {
     return -1;
 }
 
-// Menggabungkan fungsi input array dan pencarian untuk mengurangi duplikasi kode
-template <typename T>
-void inputArray(T* arr, int size) {
-    std::cout << "Enter " << size << " elements: " << std::endl;
-    for (int i = 0; i < size; i++) {
-        while (true) {
-            std::cout << "Element ke-" << (i + 1) << ": ";
-            if (std::cin >> arr[i]) break;
-            std::cout << "Invalid input. Please enter a valid value." << std::endl;
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
+// Fungsi untuk membaca kumpulan angka
+void inputNumberArray(std::vector<int>& arr) {
+    std::string line;
+    std::cout << "Enter numbers separated by spaces: ";
+    std::cin.ignore();
+    std::getline(std::cin, line);
+    std::istringstream iss(line);
+    int number;
+    while (iss >> number) {
+        arr.push_back(number);
     }
+}
+
+// Fungsi untuk membaca kalimat
+void inputCharArray(std::string& arr) {
+    std::cout << "Enter a sentence: ";
+    std::cin.ignore();
+    std::getline(std::cin, arr);
 }
 
 int main() {
@@ -51,17 +60,9 @@ int main() {
             }
         } while (choice != 'n' && choice != 'c');
 
-        int size;
-        std::cout << "Enter the size of the array: ";
-        while (!(std::cin >> size) || size <= 0) {
-            std::cout << "Invalid input. Please enter a positive integer: ";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
-
         if (choice == 'n') {
-            int* arr = new int[size];
-            inputArray(arr, size);
+            std::vector<int> arr;
+            inputNumberArray(arr);
 
             int target;
             std::cout << "Enter the target value to search: ";
@@ -71,17 +72,15 @@ int main() {
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             }
 
-            int index = searchArrayIndex(arr, size, target);
+            int index = searchArrayIndex(arr.data(), arr.size(), target);
             if (index != -1) {
                 std::cout << "Target found in the array at index " << index << "." << std::endl;
             } else {
                 std::cout << "Target not found in the array." << std::endl;
             }
-
-            delete[] arr;
         } else if (choice == 'c') {
-            char* arr = new char[size];
-            inputArray(arr, size);
+            std::string arr;
+            inputCharArray(arr);
 
             char target;
             std::cout << "Enter the target character to search: ";
@@ -91,14 +90,12 @@ int main() {
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             }
 
-            int index = searchCharArrayIndex(arr, size, target);
+            int index = searchCharArrayIndex(arr.data(), arr.size(), target);
             if (index != -1) {
                 std::cout << "Target found in the array at index " << index << "." << std::endl;
             } else {
                 std::cout << "Target not found in the array." << std::endl;
             }
-
-            delete[] arr;
         }
 
         do {
